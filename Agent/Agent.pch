@@ -261,9 +261,11 @@ description:__VA_ARGS__];                             \
 #ifdef DEBUG
 #define APIURL                  @"http://qa-api2.zmkm.la/agent/rest"
 #define PUSH_CER    @"push_dev"
+#define HUANXIN_APP_KEY @"niusan#congtoudev"
 #else
 #define APIURL                  @"http://oss.zmkm.la/agent/rest"
 #define PUSH_CER    @"push_pro"
+#define HUANXIN_APP_KEY @"niusan#congtou"
 #endif
 
 #define UMENG_APPKEY            @"54a8a3d1fd98c583b80005c7"

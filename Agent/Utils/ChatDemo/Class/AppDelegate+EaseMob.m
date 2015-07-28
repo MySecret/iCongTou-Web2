@@ -40,7 +40,7 @@
 //    apnsCertName = @"push_pro";
 //#endif
 //    [[EaseMob sharedInstance] registerSDKWithAppKey:@"niusan#congtou" apnsCertName:apnsCertName];
-    [[EaseMob sharedInstance] registerSDKWithAppKey:@"niusan#congtou"
+    [[EaseMob sharedInstance] registerSDKWithAppKey:HUANXIN_APP_KEY
                                        apnsCertName:PUSH_CER
                                         otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
     // 登录成功后，自动去取好友列表
