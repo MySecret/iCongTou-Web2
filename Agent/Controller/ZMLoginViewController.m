@@ -89,39 +89,40 @@
     [ZMHttpClient loginWithPhone:name password:psw ctr:self success:^(ZMUser *user){
     
         
-//        [SESSION setLoginUser:user];
-        //异步登陆账号
-//        [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:logid
-//                                                            password:psw
-//                                                          completion:
-//         ^(NSDictionary *loginInfo, EMError *error) {
-//             //             [self hideHud];
-//             if (loginInfo && !error) {
-//                 [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];
-//                 //                 //发送自动登陆状态通知
-//                 //                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
-//                 //将旧版的coredata数据导入新的数据库
-//                 EMError *error = [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
-//                 if (!error) {
-//                     error = [[EaseMob sharedInstance].chatManager loadDataFromDatabase];
-//                 }
-//             }else {
-//                 switch (error.errorCode) {
-//                     case EMErrorServerNotReachable:
-//                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!"));
-//                         break;
-//                     case EMErrorServerAuthenticationFailure:
-//                         TTAlertNoTitle(error.description);
-//                         break;
-//                     case EMErrorServerTimeout:
-//                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!"));
-//                         break;
-//                     default:
-//                         TTAlertNoTitle(NSLocalizedString(@"login.fail", @"Logon failure"));
-//                         break;
-//                 }
-//             }
-//         } onQueue:nil];
+        [SESSION setLoginUser:user];
+//        异步登陆账号
+        [[EaseMob sharedInstance].chatManager asyncLoginWithUsername:user.easeId
+                                                            password:user.easePwd
+                                                          completion:
+         ^(NSDictionary *loginInfo, EMError *error) {
+             //             [self hideHud];
+             if (loginInfo && !error) {
+                 [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];
+                 //                 //发送自动登陆状态通知
+                 //                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
+                 //将旧版的coredata数据导入新的数据库
+                 EMError *error = [[EaseMob sharedInstance].chatManager importDataToNewDatabase];
+                 if (!error) {
+                     error = [[EaseMob sharedInstance].chatManager loadDataFromDatabase];
+                 }
+             }else {
+                 NSLog(@"%@",error);
+                 switch (error.errorCode) {
+                     case EMErrorServerNotReachable:
+                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!"));
+                         break;
+                     case EMErrorServerAuthenticationFailure:
+                         TTAlertNoTitle(error.description);
+                         break;
+                     case EMErrorServerTimeout:
+                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!"));
+                         break;
+                     default:
+                         TTAlertNoTitle(NSLocalizedString(@"login.fail", @"Logon failure"));
+                         break;
+                 }
+             }
+         } onQueue:nil];
         AppDelegate* del = (AppDelegate *)[UIApplication sharedApplication].delegate;
         del.window.rootViewController = del.congTouHomeTabBarController;
     }];

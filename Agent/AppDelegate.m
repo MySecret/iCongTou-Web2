@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AppDelegate+EaseMob.h"
 #import "ApplyViewController.h"
 #import "ZMLoginViewController.h"
 #import "NSZMSession.h"
@@ -41,6 +42,7 @@ nc.tabBarItem.selectedImage = itemSelectedImage;\
                                                  name:KNOTIFICATION_LOGINCHANGE
                                                object:nil];
     [self loginStateChange:nil];
+    [self easemobApplication:application didFinishLaunchingWithOptions:launchOptions];
 
     TABITEM_VIEWCONTROLLER(ZMChatListViewController,hotspotWebViewController,hotspotNavigationController,@"会话",@"tab_redian_0",hotspotSelectedImage,@"tab_redian_1") \
     TABITEM_VIEWCONTROLLER(ZMWaitedViewController,guessWebViewController,guessNavigationController,@"待接入",@"tab_caicai_0",guessSelectedImage,@"tab_caicai_1") \

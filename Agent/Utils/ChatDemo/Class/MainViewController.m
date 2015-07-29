@@ -335,9 +335,9 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
     self.lastPlaySoundDate = [NSDate date];
     
     // 收到消息时，播放音频
-    [[EaseMob sharedInstance].deviceManager asyncPlayNewMessageSound];
+    //[[EaseMob sharedInstance].deviceManager asyncPlayNewMessageSound];
     // 收到消息时，震动
-    [[EaseMob sharedInstance].deviceManager asyncPlayVibration];
+    //[[EaseMob sharedInstance].deviceManager asyncPlayVibration];
 }
 
 - (void)showNotificationWithMessage:(EMMessage *)message

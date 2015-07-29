@@ -40,6 +40,7 @@
 //    apnsCertName = @"push_pro";
 //#endif
 //    [[EaseMob sharedInstance] registerSDKWithAppKey:@"niusan#congtou" apnsCertName:apnsCertName];
+	NSLog(@"HUANXIN_APP_KEY: %@", HUANXIN_APP_KEY);
     [[EaseMob sharedInstance] registerSDKWithAppKey:HUANXIN_APP_KEY
                                        apnsCertName:PUSH_CER
                                         otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
