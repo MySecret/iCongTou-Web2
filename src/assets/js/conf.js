@@ -2,7 +2,7 @@
 import store from 'store';
 
 var Rxports = {
-	appname:"云收银",
+	appname:"聪头",
 	url_host:window.location.host,
 	background:'#FBF9FE', 
 }
