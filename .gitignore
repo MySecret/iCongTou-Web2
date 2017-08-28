@@ -9,3 +9,5 @@ selenium-debug.log
 ~tpl/
 .project
 .gitignore
+.idea
+.idea/*
