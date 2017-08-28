@@ -19,7 +19,8 @@ module.exports = merge(baseWebpackConfig, {
   devtool: '#cheap-module-eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': config.dev.env
+      'process.env': config.dev.env,
+      PublicUrlAPI: JSON.stringify("http://qa-api.icongtou.com/api/rest/")
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
