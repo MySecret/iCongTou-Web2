@@ -6,7 +6,9 @@
     	<p>
     		这里展示了多页面模块下放静态文件
     	</p>
-
+        <p>
+          {{message}}
+        </p>
     </div>
     
     <div class="martop10">
@@ -31,7 +33,7 @@ export default {
   },
   data () {
     return {
-      
+      message:''
     }
   },
   methods: {
