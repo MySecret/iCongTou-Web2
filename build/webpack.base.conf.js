@@ -2,7 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var webpack = require('webpack')
 var config = require('../config')
-
+px2rem = require('postcss-px2rem');
 var glob = require('glob');
 var entries =  utils.getMultiEntry('./src/'+config.moduleName+'/**/**/*.js'); // 获得入口js文件
 var chunks = Object.keys(entries);
@@ -77,7 +77,14 @@ var webpackConfig = {
       minChunks: 4 || chunks.length //公共模块被使用的最小次数。比如配置为3，也就是同一个模块只有被3个以外的页面同时引用时才会被提取出来作为common chunks。
 
     }),*/
-   
+    new webpack.LoaderOptionsPlugin({
+      debug: false,
+      options: {
+        postcss: [
+          px2rem({remUnit: 75})
+        ],
+      },
+    })
   ]
 }
 

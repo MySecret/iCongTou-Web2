@@ -41,11 +41,6 @@ export default {
 </script>
 
 <style lang="scss">
-$baseFontSize: 75px;
-@function pxToRem($px){
-  @return $px / $baseFontSize * 1rem;
-}
-
 @mixin font-dpr($font-size)
 {
   font-size: $font-size;
@@ -54,7 +49,7 @@ $baseFontSize: 75px;
 }
 
 p{
-  font-size:pxToRem(60px);
+  font-size:75px;
 }
 img{
 	max-width:100%;
