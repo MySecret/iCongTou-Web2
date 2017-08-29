@@ -15,7 +15,7 @@ html{
 	text-size-adjust:100%;
 	word-wrap:break-word;
 }
-body {
+body,html {
 	font-family: tahoma,arial, 'Microsoft YaHei','\u5b8b\u4f53'
 }
 
