@@ -3,6 +3,8 @@ import conf from './conf';
 
 import axios from 'axios';
 
+import fetchJsonp from 'fetch-jsonp';
+
 var oproto = Object.prototype;
 var serialize = oproto.toString;
 var Rxports = {
@@ -116,6 +118,24 @@ var Rxports = {
 　　     if (reg.test(url))
 　　     return unescape(RegExp.$2.replace(/\+/g, " "));
 　　     return "";
+	},
+	ajaxJsonp:function(_url,options){
+		var options = options || {},
+			 params = options.data || {},
+			 successFunc = options.success || function() {};
+		if(Object.keys(params).length){
+			_url += _url.indexOf('?') === -1 ? '?' : '&';
+			for(let [key,value] of Object.entries(params)){
+				_url+=key + '=' + value + "&";
+			}
+			_url = _url.substring(0,_url.length-1);
+			delete options.data;
+		}
+		fetchJsonp(_url,options).then(function(response){
+			successFunc.call(Rxports,response);
+		}).catch(function(err){
+			console.log(err);
+		})
 	}
 };
 
