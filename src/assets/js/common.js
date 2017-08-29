@@ -120,7 +120,7 @@ var Rxports = {
 　　     return "";
 	},
 	ajaxJsonp:function(_url,options){
-		var options = options || {},
+		var options =Object.assign({jsonpCallback:'jsoncallback'},options)  || {jsonpCallback:'jsoncallback'},
 			 params = options.data || {},
 			 successFunc = options.success || function() {};
 		if(Object.keys(params).length){
