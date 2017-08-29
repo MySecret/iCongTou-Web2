@@ -42,24 +42,17 @@ var Rxports = {
 			timeout: opts.time || 10*1000,
 			responseType: opts.dataType || 'json'
 		}).then(function(res){
-			
 			if(res.status == 200 ){
-				
 				if(opts.success){
 					opts.success(res.data,res);
 				}
-				
 			}else{
-				
 				if (data.error) {
 					opts.error(error);
 				}else{
 					alert('好多人在访问呀，请重新试试[timeout]');
 				}
-				
 			}
-			
-				
 		}).catch(function (error){
 			console.log(error);
 			if (opts.error) {
@@ -68,7 +61,6 @@ var Rxports = {
 				alert('好多人在访问呀，请重新试试[timeout]');
 			}
 		});
-			
 	},
 	/*判定是否类数组，如节点集合，纯数组，arguments与拥有非负整数的length属性的纯JS对象*/
 	isArrayLike:function(obj) {
@@ -118,17 +110,13 @@ var Rxports = {
 	  * @param return
 	*/
 	getUrlQuery:function (name,Url){
-	
 	   //URL GET 获取值
 　　   var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i"),
              url = Url || location.href;
 　　     if (reg.test(url))
 　　     return unescape(RegExp.$2.replace(/\+/g, " "));
 　　     return "";
-	
 	}
-
-    
 };
 
 
