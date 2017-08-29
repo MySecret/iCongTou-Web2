@@ -20,9 +20,7 @@ module.exports = merge(baseWebpackConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env,
-      PublicUrlAPI: JSON.stringify("http://qa-api.icongtou.com/api/rest/"),
-      jQuery: "jQuery",
-      $: "jQuery"
+      PublicUrlAPI: JSON.stringify("http://qa-api.icongtou.com/api/rest/")
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
