@@ -56,6 +56,7 @@ p{
 }
 img{
 	max-width:100%;
+  transform:translate(0,0);
 }
 
 </style>
