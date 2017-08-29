@@ -132,10 +132,13 @@ var Rxports = {
 			delete options.data;
 		}
 		fetchJsonp(_url,options).then(function(response){
-			successFunc.call(Rxports,response);
+			response.json().then(function(response){
+				successFunc.call(Rxports,response);
+			});
 		}).catch(function(err){
 			console.log(err);
 		})
+		return this;
 	}
 };
 

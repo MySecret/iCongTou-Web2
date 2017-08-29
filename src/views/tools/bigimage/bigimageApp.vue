@@ -26,7 +26,16 @@ import HbHead from 'components/HbHead';
 
 import $ from 'jquery';
 
-console.log($);
+Lib.M.ajaxJsonp('http://qa-api.icongtou.com/api/rest/stock/searchAndSort',{
+  data:{
+    keyword:0,
+    sort:'code'
+  },
+        jsonpCallback:'jsoncallback',
+  success:function(source){
+    console.log(source);
+  }
+});
 export default {
 
   components: {
