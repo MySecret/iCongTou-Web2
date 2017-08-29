@@ -50,6 +50,7 @@ var webpackConfig = {
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
       },
+
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
@@ -77,14 +78,16 @@ var webpackConfig = {
       minChunks: 4 || chunks.length //公共模块被使用的最小次数。比如配置为3，也就是同一个模块只有被3个以外的页面同时引用时才会被提取出来作为common chunks。
 
     }),*/
-    new webpack.LoaderOptionsPlugin({
-      debug: false,
+
+    /*注释2. new webpack.LoaderOptionsPlugin({
       options: {
-        postcss: [
-          px2rem({remUnit: 75})
-        ],
-      },
-    })
+        postcss: function(){
+          return [
+            px2rem({remUnit: 75})
+          ]
+        }
+      }
+    })*/
   ]
 }
 

@@ -49,7 +49,7 @@ export default {
 }
 
 p{
-  font-size:75px;
+  font-size:28px;
 }
 img{
 	max-width:100%;

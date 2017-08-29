@@ -13,6 +13,8 @@ module.exports = {
     require('autoprefixer')({
       browsers: ['iOS >= 7', 'Android >= 4.1']
     }),
+
+      /**注释3**/
     require('postcss-px2rem')({remUnit: 75})
   ]
 }

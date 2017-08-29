@@ -26,6 +26,15 @@ exports.cssLoaders = function (options) {
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
     var loaders = [cssLoader]
+      /***
+       * 两种配置方式：
+       * 1、在此处加上将‘注释1’加上，并且在webpack.base.conf.js里面的注释2加上
+       * 2、在vue-loader.conf.js把注释3加上
+       * 这两种只需要配置1种即可，区别是，1方法可以将所有的css都通过post-css转换，而2方法只能          转换.vue里面的style样式
+       */
+     /*注释1. loaders.push({
+          loader: 'postcss-loader'
+      });*/
     if (loader) {
       loaders.push({
         loader: loader + '-loader',
