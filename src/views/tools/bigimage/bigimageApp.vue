@@ -24,6 +24,9 @@ import Lib from 'assets/js/Lib';
 
 import HbHead from 'components/HbHead';
 
+import $ from 'jquery';
+
+console.log($);
 export default {
 
   components: {
