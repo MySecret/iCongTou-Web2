@@ -24,6 +24,18 @@ import Lib from 'assets/js/Lib';
 
 import HbHead from 'components/HbHead';
 
+import $ from 'jquery';
+
+Lib.M.ajaxJsonp('http://qa-api.icongtou.com/api/rest/stock/searchAndSort',{
+  data:{
+    keyword:0,
+    sort:'code'
+  },
+        jsonpCallback:'jsoncallback',
+  success:function(source){
+    console.log(source);
+  }
+});
 export default {
 
   components: {
@@ -53,6 +65,7 @@ p{
 }
 img{
 	max-width:100%;
+  transform:translate(0,0);
 }
 
 </style>
