@@ -31,7 +31,6 @@ Lib.M.ajaxJsonp('http://qa-api.icongtou.com/api/rest/stock/searchAndSort',{
     keyword:0,
     sort:'code'
   },
-        jsonpCallback:'jsoncallback',
   success:function(source){
     console.log(source);
   }
