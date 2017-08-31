@@ -4,11 +4,11 @@ import conf from './conf';
 import axios from 'axios';
 
 import fetchJsonp from 'fetch-jsonp';
-
+var wx = require('weixin-js-sdk');
 var oproto = Object.prototype;
 var serialize = oproto.toString;
 var Rxports = {
-	
+
 	
 	/**
 	  * 封装axios，减少学习成本，参数基本跟jq ajax一致
@@ -139,7 +139,90 @@ var Rxports = {
 			console.log(err);
 		})
 		return this;
+	},
+    formatTimeToHour: function(fmt) {
+		let date = new Date(fmt)
+		return date.Format('hh:mm')
+	},
+    formatTimeToWeek: function (fmt) {
+		let date = new Date(fmt)
+		let weekDay = {
+			'0' : '星期日',
+			'1' : '星期一',
+			'2' : '星期二',
+			'3' : '星期三',
+			'4' : '星期四',
+			'5' : '星期五',
+			'6' : '星期六'
+		}
+		return weekDay[date.Format('w')]
+	},
+    WXshare: function(setUpInfo, callback) {
+		var shareUrl = location.href.split('#')[0];
+		var shareTitle_t = setUpInfo.shareTitle_t || setUpInfo.title;
+		var lineLink_t = shareUrl;
+		var imgUrl_t = setUpInfo.imgUrl_t || setUpInfo.imageUrl;
+		var descContent_t = setUpInfo.descContent_t || setUpInfo.text;
+
+		//好友数据
+		var shareTitle_f = setUpInfo.shareTitle_f || setUpInfo.title;
+		var lineLink_f = shareUrl;
+		var imgUrl_f = setUpInfo.imgUrl_f || setUpInfo.imageUrl;
+		var descContent_f = setUpInfo.descContent_f || setUpInfo.text;
+
+		var Wxsharemessage = 'http://api2.zmkm.la/api/rest/system/jssdk'; //这里必须写死这个后台的接口，因为微信没有QA，所以直接用正式的
+		var options = {
+			success: function(data){
+                var data = data.data;
+                var appid = data.appid;
+                var timestamp = data.timestamp;
+                var nonceStr = data.noncestr;
+                var signature = data.sign;
+                wx.config({
+                    debug: false,
+                    appId: appid,
+                    timestamp: timestamp,
+                    nonceStr: nonceStr,
+                    signature: signature,
+                    jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage']
+                });
+                wx.ready(function () {
+                    //分享朋友圈
+                    wx.onMenuShareTimeline({
+                        title: shareTitle_t, // 分享标题
+                        link: lineLink_t, // 分享链接
+                        imgUrl: imgUrl_t, // 分享图标
+                        success: function () {
+							alert('分享成功')
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    //分享好友
+                    wx.onMenuShareAppMessage({
+                        title: shareTitle_f, // 分享标题
+                        desc: descContent_f, // 分享描述
+                        link: lineLink_f, // 分享链接
+                        imgUrl: imgUrl_f, // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () {
+                            callback
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+			}
+		};
+		this.ajaxJsonp(Wxsharemessage,options)
 	}
+
+
 };
 Date.prototype.Format = function(fmt)
 { //author: meizz
@@ -160,24 +243,6 @@ Date.prototype.Format = function(fmt)
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
     return fmt;
 }
-export function formatTimeToHour(fmt) {
-	let date = new Date(fmt)
-	return date.Format('hh:mm')
-}
-export function formatTimeToWeek(fmt) {
-	let date = new Date(fmt)
-	let weekDay = {
-		'0' : '星期日',
-        '1' : '星期一',
-        '2' : '星期二',
-        '3' : '星期三',
-        '4' : '星期四',
-        '5' : '星期五',
-        '6' : '星期六'
-	}
-	return weekDay[date.Format('w')]
-}
-
 export default Rxports;
 
 

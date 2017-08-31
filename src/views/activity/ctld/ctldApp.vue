@@ -1,7 +1,14 @@
 <template>
     <div class="mainWrapper" :style="pageHeight">
         <ul class="container" id="container" ref="container">
-            <li class="page" :style="pageHeight"><img src="./assets/page1.jpg" alt="" @touchstart="docTouchStart" @touchmove="docTouchMove"></li>
+            <li class="page" :style="pageHeight" @touchstart="docTouchStart" @touchmove="docTouchMove">
+                <div class="avatar">
+                    <img src="./assets/logo.jpg" alt="">
+                </div>
+                <div class="text">个股情报侦查员</div>
+                <div class="desc">紧急情报！{{ctStock.name}}有重大消息</div>
+                <img src="./assets/tellphone.png" alt="" class="tellphone">
+            </li>
             <li class="page" :style="pageHeight">
                 <p class="time" v-html="this.time"></p>
                 <div class="chatWrapper">
@@ -73,19 +80,25 @@
             </li>
             <li class="page" :style="pageHeight"><img src="./assets/page3.jpg" alt=""></li>
         </ul>
+        <img src="./assets/guideinput.png" alt="" class="guideinput" v-show="ctVoiceEnd">
+        <div class="share" v-show="share">
+            <img src="./assets/share.png" alt="">
+        </div>
         <audio :src="voice.zero.src" @canplay="pageOneCanPlay" ref="pageOneMp3"></audio>
-        <audio :src="voice.one.src"  ref="pageTwo1Mp3" @timeupdate="voiceLength" @ended="ctVoiceEnded"></audio>
+        <audio :src="ctStock.url"  ref="pageTwo1Mp3" @timeupdate="voiceLength" @ended="ctVoiceEnded"></audio>
         <audio :src="voice.two.src"  ref="pageTwo2Mp3"  @ended="ctTwoVoiceEnded"></audio>
     </div>
 </template>
+
 <script type="text/ecmascript-6">
     import Lib from 'assets/js/Lib'
     import {prefixStyle} from 'assets/js/dom'
-    import {formatTimeToWeek, formatTimeToHour} from 'assets/js/common'
+    import Rxports from 'assets/js/common'
     import fetchJsonp from 'fetch-jsonp'
     const transform = prefixStyle('transform')
     const transition = prefixStyle('transition')
     let searchUrl = PublicUrlAPI + 'stock/searchAndSort'
+    let loadUrl = PublicUrlAPI + 'activity/call'
     export default {
         data() {
             return{
@@ -98,6 +111,9 @@
                 pageOnePlay: false,
                 pageTwoPlay1: false,
                 pageTwoPlay2: false,
+                ctStock: {
+
+                },
                 voice: {
                     zero:{
                         src: 'http://cdnringuc.shoujiduoduo.com/ringres/user/a24/253/24990253.aac',
@@ -116,7 +132,9 @@
                         play: false
                     }
                 },
-                userDate:''
+                userDate:'',
+                ctVoiceEnd: 0,
+                share: 0
             }
         },
         computed: {
@@ -128,7 +146,24 @@
         mounted() {
             setTimeout(this._pageTransform, 5000)
             let date = new Date()
-            this.time = formatTimeToWeek(date) +' '+ formatTimeToHour(date)
+            this.time = Rxports.formatTimeToWeek(date) +' '+ Rxports.formatTimeToHour(date)
+            let url = loadUrl
+            let that = this
+            fetchJsonp(url, {
+                jsonpCallback: 'jsoncallback',
+            }).then(function(response) {
+                return response.json()
+            }).then(function(json) {
+                that.ctStock = json.data
+            })
+            // 设置分享
+            let shareInfo = {
+                "title":'分享标题',
+                "text":'分享描述',
+                "imageUrl":'',
+                "url":window.location.href
+            }
+            Rxports.WXshare(shareInfo)
         },
         watch: {
             pageOnePlay(newPlay) {
@@ -148,6 +183,9 @@
             }
         },
         methods: {
+            shareSuccess() {
+              alert('才成功')
+            },
             docTouchStart(e) {
                 this.touchY = e.touches[0].pageY
             },
@@ -172,20 +210,24 @@
                 }
             },
             search() {
+                this.ctVoiceEnd = 0
                 let that = this
                 let keyword = this.$refs.input.value
                 if (keyword == '') {
                     return
                 }
                 that.stockList = []
-                let url = searchUrl + `?keyword=${keyword}&sort=code&size=10`
-                fetchJsonp(url, {
-                    jsonpCallback: 'jsoncallback',
-                }).then(function(response) {
-                    return response.json()
-                }).then(function(json) {
-                    that.stockList = json.data
-                })
+                let option={
+                    data: {
+                        keyword : keyword,
+                        sort: 'code',
+                        size: '10'
+                    },
+                    success: function(res){
+                        that.stockList = res.data
+                    }
+                }
+                Rxports.ajaxJsonp(searchUrl, option)
             },
             pageOneCanPlay() {
                 this.pageOnePlay = true
@@ -195,6 +237,7 @@
             },
             ctVoiceEnded() {
                 this.pageTwoPlay1 = false
+                this.ctVoiceEnd = 1
             },
             ctTwoVoiceEnded() {
                 this.pageTwoPlay2 = false
@@ -216,8 +259,17 @@
                 this.userDate = item.name
                 let code = item.code
                 this.stockList = []
-                vm.$off([input,search])
-                this.voice.two.src="http://tsn.baidu.com/text2audio?tex=%E5%B9%B3%E5%AE%89%E9%93%B6%E8%A1%8C%E5%95%8A%E6%88%91%E8%B7%9F%E4%BD%A0%E8%AF%B4%E8%BF%99%E4%B8%AA%E4%B8%8D%E9%94%99%E7%9A%84%E5%95%8A&ctp=1&lan=zh&cuid=0e247865&tok=24.17fad79728dfead108d1f9621b1ff508.2592000.1505966324.282335-9931908"
+                this.$refs.input.value = ''
+                let url = `${loadUrl}?code=${code}`
+                let that = this
+                fetchJsonp(url, {
+                    jsonpCallback: 'jsoncallback',
+                }).then(function(response) {
+                    return response.json()
+                }).then(function(json) {
+                    that.voice.two.src = json.data.url
+                    that.share = 1
+                })
             }
         }
     }
@@ -234,8 +286,34 @@
     .page {
         overflow: hidden;
         &:first-child{
-            img{
+            position: relative;
+            background-size:100% 100%;
+            background-image:url('./assets/onebg.jpg');
+            text-align: center;
+            color:#fff;
+            .avatar{
+                width:206px;
+                height:206px;
+                border-radius:50%;
+                overflow: hidden;
+                margin:70px auto 35px;
+                img{
+                    width:100%;
+                    height:100%;
+                }
+            }
+            .text{
+                font-size:70px;
+            }
+            .desc{
+                font-size:34px;
+                line-height:110px;
+            }
+            .tellphone{
                 width:100%;
+                position: absolute;
+                bottom:130px;
+                left:0px;
             }
         }
         &:nth-of-type(2){
@@ -370,7 +448,26 @@
                         text-align: left;
                     }
                 }
+
             }
+        }
+    }
+    .guideinput{
+        position: absolute;
+        bottom:110px;
+        left:20px;
+    }
+    .share{
+        position: fixed;
+        width:100%;
+        height:100%;
+        top:0px;
+        left:0px;
+        background:rgba(0,0,0,0.5);
+        img{
+            position: absolute;
+            right:0px;
+
         }
     }
 </style>
