@@ -78,7 +78,10 @@
                     <input type="text" @input="search" ref="input">
                 </div>
             </li>
-            <li class="page" :style="pageHeight"><img src="./assets/page3.jpg" alt=""></li>
+            <li class="page" :style="pageHeight">
+                <img src="./assets/page3bg.png" alt="" class="page3bg">
+                <img src="./assets/download.png" alt="" class="download">
+            </li>
         </ul>
         <img src="./assets/guideinput.png" alt="" class="guideinput" v-show="ctVoiceEnd">
         <div class="share" v-show="share">
@@ -368,6 +371,8 @@
                                 position: absolute;
                                 top:55px;
                                 left:50px;
+                                width:25px;
+                                height:34px;
                             }
                             .red{
                                 position: absolute;
@@ -456,6 +461,8 @@
         position: absolute;
         bottom:110px;
         left:20px;
+        width:266px;
+        height:177px;
     }
     .share{
         position: fixed;
