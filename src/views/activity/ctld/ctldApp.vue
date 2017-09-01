@@ -19,7 +19,7 @@
                         <div class="answer-text">
                             <div class="answer-name">侦查员小聪</div>
                             <div class="answer-msg">
-                                <p class="answer-vioce">有很重要的个股侦察情报告诉你就在这个群里说吧！</p>
+                                <p class="answer-vioce">有很重要的个股侦察情报告诉你,就在这个群里说吧！</p>
                                 <p class="sanjiao i-answer"></p>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="user-input">
+                <div class="user-input" v-show="userinput">
                     <input type="text" @input="search" ref="input" @focus="focus">
                 </div>
             </li>
@@ -111,6 +111,7 @@
                 touchnewY: 0,
                 autoTransform: 1,
                 time:0,
+                userinput:1,
                 stockList: [],
                 pageOnePlay: false,
                 pageTwoPlay1: false,
@@ -313,6 +314,7 @@
             },
             choseStock(item) {
                 this.userDate = item.name
+                this.userinput = 0
                 let code = item.code
                 this.stockList = []
                 this.$refs.input.value = ''
