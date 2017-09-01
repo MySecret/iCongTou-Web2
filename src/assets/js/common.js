@@ -9,7 +9,7 @@ var oproto = Object.prototype;
 var serialize = oproto.toString;
 var Rxports = {
 
-	
+
 	/**
 	  * 封装axios，减少学习成本，参数基本跟jq ajax一致
 	  * @param {String} type			请求的类型，默认post
@@ -166,13 +166,7 @@ var Rxports = {
 		return weekDay[date.Format('w')]
 	},
     WXshare: function(setUpInfo, callback) {
-		// var index=window.location.href.indexOf('from')
-		// if(index == -1) {
-         //    var shareUrl = window.location.href;
-		// }else{
-         //    var shareUrl = window.location.href.substring(0,index-1);
-		// }
-        var shareUrl = encodeURIComponent(window.location.href)
+		var shareUrl = encodeURIComponent(location.href.split('#')[0]);
 		var shareTitle_t = setUpInfo.shareTitle_t || setUpInfo.title;
 		var lineLink_t = shareUrl;
 		var imgUrl_t = setUpInfo.imgUrl_t || setUpInfo.imageUrl;
