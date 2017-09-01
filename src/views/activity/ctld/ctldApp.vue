@@ -89,7 +89,7 @@
             <img src="./assets/share.png" alt="">
         </div>
         <audio :src="voice.zero.src"  ref="pageOneMp3"  @error="error"></audio>
-        <audio :src="ctStock.url"  ref="pageTwo1Mp3" @timeupdate="updateTime" @ended="ctVoiceEnded"></audio>
+        <audio :src="ctStock.url"  ref="pageTwo1Mp3" @ended="ctVoiceEnded"></audio>
         <audio :src="voice.two.src"  ref="pageTwo2Mp3"  @ended="ctTwoVoiceEnded"></audio>
     </div>
 </template>
@@ -119,19 +119,19 @@
                 },
                 voice: {
                     zero:{
-                        src: 'http://ws.stream.qqmusic.qq.com/105030812.m4a?fromtag=46',
+                        src: 'http://mp3.9ku.com/m4a/550430.m4a',
                         length:0,
                         play: false
                     },
                     one:{
-                        src: 'http://tsn.baidu.com/text2audio?tex=%E4%BD%A0%E6%98%AF%E9%A3%8E%E5%84%BF%E5%84%BF%E6%88%91%E6%98%AF%E6%B2%99%E5%84%BF%E5%84%BF%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E7%9D%A1%E4%BB%96%E5%AE%B6&ctp=1&lan=zh&cuid=0e247865&tok=24.17fad79728dfead108d1f9621b1ff508.2592000.1505966324.282335-9931908',
-                        length:0,
+                        src: '',
+                        length:11,
                         red: 1,
                         play: false
                     },
                     two:{
                         src: '',
-                        length:24,
+                        length:11,
                         red: 1,
                         play: false
                     }
@@ -140,7 +140,6 @@
                 guideShow: 1,
                 ctVoiceEnd: 0,
                 share: 0,
-                shareImg:'./assets/red.png',
                 voiceClick: 1
             }
         },
@@ -168,7 +167,7 @@
             let shareInfo = {
                 "title":'个股侦查小分队发来前方紧急内幕消息！',
                 "text":`紧急通知！重大消息！这支股票即将有大动作，需密切注意！`,
-                "imageUrl":this.shareImg,
+                "imageUrl":'http://zmkm.qiniudn.com/congtoulogo.png',
                 "url":window.location.href
             }
             Rxports.WXshare(shareInfo,() => {
@@ -280,9 +279,6 @@
                     }
                 }
                 Rxports.ajaxJsonp(searchUrl, option)
-            },
-            updateTime(e) {
-                this.voice.one.length = e.target.duration
             },
             ctVoiceEnded() {
                 this.pageTwoPlay1 = false
