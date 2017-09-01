@@ -7,7 +7,7 @@
                 </div>
                 <div class="text">个股情报侦查员</div>
                 <div class="desc">紧急情报！{{ctStock.name}}有重大消息</div>
-                <img src="./assets/tellphone.png" alt="" class="tellphone">
+                <img src="./assets/tellphone.png" alt="" class="tellphone" @click="tellphone">
             </li>
             <li class="page" :style="pageHeight">
                 <p class="time" v-html="this.time"></p>
@@ -80,7 +80,7 @@
             </li>
             <li class="page" :style="pageHeight">
                 <img src="./assets/page3bg.png" alt="" class="page3bg">
-                <img src="./assets/download.png" alt="" class="download">
+                <img src="./assets/download.png" alt="" class="download" @click="download">
             </li>
         </ul>
         <img src="./assets/guideinput.png" alt="" class="guideinput" v-show="ctVoiceEnd">
@@ -136,6 +136,7 @@
                     }
                 },
                 userDate:'',
+                guideShow: 1,
                 ctVoiceEnd: 0,
                 share: 0
             }
@@ -155,7 +156,7 @@
                 "url":window.location.href
             }
             Rxports.WXshare(shareInfo,() => {
-                alert(1)
+                this.share = 0
             })
         },
         mounted() {
@@ -189,17 +190,18 @@
                 })
             },
             pageTwoPlay1(newPlay) {
+                console.log(newPlay)
                 this.$nextTick(() => {
-//                    if(Rxports.isWeiXin()){
-//                        let that = this
-//                        document.addEventListener('WeixinJSBridgeReady', function() {
-//                            alert(1)
-//                            return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
-//                        })
-//                        return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
-//                    }else {
+                    if(Rxports.isWeiXin()){
+                        let that = this
+                        document.addEventListener('WeixinJSBridgeReady', function() {
+                            alert(1)
+                            return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
+                        })
+                        return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
+                    }else {
                         return newPlay ? this.$refs.pageTwo1Mp3.play() : this.$refs.pageTwo1Mp3.pause()
-//                    }
+                    }
                 })
             },
             pageTwoPlay2(newPlay) {
@@ -219,6 +221,9 @@
         methods: {
             error(){
                 alert('报错')
+            },
+            tellphone() {
+                this._pageTransform()
             },
             docTouchStart(e) {
                 this.touchY = e.touches[0].pageY
@@ -243,7 +248,12 @@
                     this.pageTwoPlay1 = true
                 }
             },
+            _pageTransformTwo(){
+                this.$refs.container.style[transition] = `all 0.3s`
+                this.$refs.container.style[transform] = `translate3d(0, -${2 * this.windowH}px, 0)`
+            },
             search() {
+                this.guideShow = 0
                 this.ctVoiceEnd = 0
                 let that = this
                 let keyword = this.$refs.input.value
@@ -264,14 +274,19 @@
                 Rxports.ajaxJsonp(searchUrl, option)
             },
             updateTime(e) {
+                console.log(e.target.duration)
                 this.voice.one.length = e.target.duration
             },
             ctVoiceEnded() {
                 this.pageTwoPlay1 = false
-                this.ctVoiceEnd = 1
+                if(this.guideShow) {
+                    this.ctVoiceEnd = 1
+                }
             },
             ctTwoVoiceEnded() {
                 this.pageTwoPlay2 = false
+                this.autoTransform = 1
+                setTimeout(this._pageTransformTwo, 1000)
             },
             format(interval) {
                 interval = Math.round(interval)
@@ -301,6 +316,9 @@
                     that.voice.two.src = json.data.url
                     that.share = 1
                 })
+            },
+            download() {
+                window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.niusan.zmkm"
             }
         }
     }
@@ -484,6 +502,21 @@
                     }
                 }
 
+            }
+        }
+        &:nth-of-type(3){
+            position: relative;
+            .page3bg{
+                width:100%;
+                height:100%;
+            }
+            .download{
+                width:378px;
+                height:92px;
+                position: absolute;
+                top:1010px;
+                left:50%;
+                transform:translate3d(-50%,0,0);
             }
         }
     }
