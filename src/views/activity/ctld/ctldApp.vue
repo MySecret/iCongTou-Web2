@@ -147,18 +147,6 @@
                 return `height: ${this.windowH}px`
             }
         },
-        created() {
-            // 设置分享
-            let shareInfo = {
-                "title":'分享标题',
-                "text":'分享描述',
-                "imageUrl":'',
-                "url":window.location.href
-            }
-            Rxports.WXshare(shareInfo,() => {
-                this.share = 0
-            })
-        },
         mounted() {
             this.pageOnePlay = true // 第一个声音默认可以播放
             setTimeout(this._pageTransform, 5000)
@@ -172,6 +160,16 @@
                 return response.json()
             }).then(function(json) {
                 that.ctStock = json.data
+            })
+            // 设置分享
+            let shareInfo = {
+                "title":'分享标题',
+                "text":'分享描述',
+                "imageUrl":'',
+                "url":window.location.href
+            }
+            Rxports.WXshare(shareInfo,() => {
+                this.share = 0
             })
 
         },
@@ -195,7 +193,6 @@
                     if(Rxports.isWeiXin()){
                         let that = this
                         document.addEventListener('WeixinJSBridgeReady', function() {
-                            alert(1)
                             return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
                         })
                         return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
