@@ -4,6 +4,7 @@ import conf from './conf';
 import axios from 'axios';
 
 import fetchJsonp from 'fetch-jsonp';
+import baidu from 'assets/js/baidu';
 var wx = require('weixin-js-sdk');
 var oproto = Object.prototype;
 var serialize = oproto.toString;
@@ -166,12 +167,14 @@ var Rxports = {
 		return weekDay[date.Format('w')]
 	},
     WXshare: function(setUpInfo, callback) {
+
 		var index = window.location.href.indexOf('?')
 		if(index == -1){
             var shareUrl = window.location.href;
 		}else{
-            var shareUrl = window.location.href.substr(0,index);
+            var shareUrl = location.href.substring(0, location.href.lastIndexOf('?'))
 		}
+		alert(shareUrl)
 		var shareTitle_t = setUpInfo.shareTitle_t || setUpInfo.title;
 		var lineLink_t = shareUrl;
 		var imgUrl_t = setUpInfo.imgUrl_t || setUpInfo.imageUrl;
