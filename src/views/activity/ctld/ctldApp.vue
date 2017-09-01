@@ -34,6 +34,7 @@
                                 <p class="answer-audio answer-vioce"></p>
                                 <p class="sanjiao i-answer"></p>
                                 <img src="./assets/voice.png" alt="" class="voice">
+                                <img src="./assets/red.png" alt="" class="red" v-show="voice.one.red">
                                 <p class="minite">{{format(voice.one.length)}}''</p>
                             </div>
                         </div>
@@ -50,7 +51,7 @@
                             <img src="./assets/logo.jpg" alt="">
                         </div>
                     </div>
-                    <div class="msg ctmsg" v-show="voice.two.src" @click="voiceTwoPlay">
+                    <div class="msg ctmsg" v-show="voice.two.src" @click="voiceTwoPlay" >
                         <div class="answer-img">
                             <img src="./assets/logo.jpg" alt="">
                         </div>
@@ -75,7 +76,7 @@
                     </ul>
                 </div>
                 <div class="user-input">
-                    <input type="text" @input="search" ref="input">
+                    <input type="text" @input="search" ref="input" @focus="focus">
                 </div>
             </li>
             <li class="page" :style="pageHeight">
@@ -115,7 +116,6 @@
                 pageTwoPlay1: false,
                 pageTwoPlay2: false,
                 ctStock: {
-
                 },
                 voice: {
                     zero:{
@@ -126,6 +126,7 @@
                     one:{
                         src: 'http://tsn.baidu.com/text2audio?tex=%E4%BD%A0%E6%98%AF%E9%A3%8E%E5%84%BF%E5%84%BF%E6%88%91%E6%98%AF%E6%B2%99%E5%84%BF%E5%84%BF%E6%88%91%E4%BB%AC%E4%B8%80%E8%B5%B7%E7%9D%A1%E4%BB%96%E5%AE%B6&ctp=1&lan=zh&cuid=0e247865&tok=24.17fad79728dfead108d1f9621b1ff508.2592000.1505966324.282335-9931908',
                         length:0,
+                        red: 1,
                         play: false
                     },
                     two:{
@@ -138,7 +139,9 @@
                 userDate:'',
                 guideShow: 1,
                 ctVoiceEnd: 0,
-                share: 0
+                share: 0,
+                shareImg:'./assets/red.png',
+                voiceClick: 1
             }
         },
         computed: {
@@ -165,13 +168,13 @@
             let shareInfo = {
                 "title":'个股侦查小分队发来前方紧急内幕消息！',
                 "text":`紧急通知！重大消息！这支股票即将有大动作，需密切注意！`,
-                "imageUrl":'',
+                "imageUrl":this.shareImg,
                 "url":window.location.href
             }
             Rxports.WXshare(shareInfo,() => {
                 this.share = 0
+                this.voiceClick = 0
             })
-
         },
         watch: {
             pageOnePlay(newPlay) {
@@ -240,7 +243,6 @@
                     this.$refs.container.style[transition] = `all 0.3s`
                     this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
                     this.pageOnePlay = false
-                    this.pageTwoPlay1 = true
                     this.autoTransform = 0
                     return;
                 }
@@ -250,16 +252,17 @@
                     this.$refs.container.style[transition] = `all 0.3s`
                     this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
                     this.pageOnePlay = false
-                    this.pageTwoPlay1 = true
                 }
             },
             _pageTransformTwo(){
                 this.$refs.container.style[transition] = `all 0.3s`
                 this.$refs.container.style[transform] = `translate3d(0, -${2 * this.windowH}px, 0)`
             },
+            focus(){
+                this.ctVoiceEnd = 0
+            },
             search() {
                 this.guideShow = 0
-                this.ctVoiceEnd = 0
                 let that = this
                 let keyword = this.$refs.input.value
                 if (keyword == '') {
@@ -299,11 +302,18 @@
             voicePlay() {
                 this.pageTwoPlay1 = !this.pageTwoPlay1
                 this.pageTwoPlay2 = false
+                this.voice.one.red = 0
             },
             voiceTwoPlay() {
-                this.pageTwoPlay2 = !this.pageTwoPlay2
-                this.pageTwoPlay1 = false
-                this.voice.two.red = 0
+                if(this.voiceClick) {
+                    if(!this.share) {
+                        this.share = 1
+                    }
+                }else{
+                    this.pageTwoPlay2 = !this.pageTwoPlay2
+                    this.pageTwoPlay1 = false
+                    this.voice.two.red = 0
+                }
             },
             choseStock(item) {
                 this.userDate = item.name
@@ -318,7 +328,7 @@
                     return response.json()
                 }).then(function(json) {
                     that.voice.two.src = json.data.url
-                    that.share = 1
+
                 })
             },
             download() {
