@@ -163,8 +163,8 @@
             })
             // 设置分享
             let shareInfo = {
-                "title":'分享标题',
-                "text":'分享描述',
+                "title":'个股侦查小分队发来前方紧急内幕消息！',
+                "text":`紧急通知！重大消息！这支股票即将有大动作，需密切注意！`,
                 "imageUrl":'',
                 "url":window.location.href
             }
@@ -178,24 +178,29 @@
                 this.$nextTick(() => {
                     if(Rxports.isWeiXin()){
                         let that = this
-                        document.addEventListener('WeixinJSBridgeReady', function() {
+                        if(window.WeixinJSBridge) {
                             return newPlay ? that.$refs.pageOneMp3.play() : that.$refs.pageOneMp3.pause()
-                        })
-                        return newPlay ? that.$refs.pageOneMp3.play() : that.$refs.pageOneMp3.pause()
+                        }else {
+                            document.addEventListener('WeixinJSBridgeReady', function() {
+                                return newPlay ? that.$refs.pageOneMp3.play() : that.$refs.pageOneMp3.pause()
+                            })
+                        }
                     }else{
                         return newPlay ? this.$refs.pageOneMp3.play() : this.$refs.pageOneMp3.pause()
                     }
                 })
             },
             pageTwoPlay1(newPlay) {
-                console.log(newPlay)
                 this.$nextTick(() => {
                     if(Rxports.isWeiXin()){
                         let that = this
-                        document.addEventListener('WeixinJSBridgeReady', function() {
+                        if(window.WeixinJSBridge) {
                             return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
-                        })
-                        return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
+                        }else {
+                            document.addEventListener('WeixinJSBridgeReady', function() {
+                                return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
+                            })
+                        }
                     }else {
                         return newPlay ? this.$refs.pageTwo1Mp3.play() : this.$refs.pageTwo1Mp3.pause()
                     }
@@ -205,10 +210,13 @@
                 this.$nextTick(() => {
                     if(Rxports.isWeiXin()){
                         let that = this
-                        document.addEventListener('WeixinJSBridgeReady', function() {
+                        if(window.WeixinJSBridge) {
                             return newPlay ? that.$refs.pageTwo2Mp3.play() : that.$refs.pageTwo2Mp3.pause()
-                        })
-                        return newPlay ? that.$refs.pageTwo2Mp3.play() : that.$refs.pageTwo2Mp3.pause()
+                        }else {
+                            document.addEventListener('WeixinJSBridgeReady', function() {
+                                return newPlay ? that.$refs.pageTwo2Mp3.play() : that.$refs.pageTwo2Mp3.pause()
+                            })
+                        }
                     }else {
                         return newPlay ? this.$refs.pageTwo2Mp3.play() : this.$refs.pageTwo2Mp3.pause()
                     }
@@ -271,7 +279,6 @@
                 Rxports.ajaxJsonp(searchUrl, option)
             },
             updateTime(e) {
-                console.log(e.target.duration)
                 this.voice.one.length = e.target.duration
             },
             ctVoiceEnded() {
