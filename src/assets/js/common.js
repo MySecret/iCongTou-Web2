@@ -166,13 +166,13 @@ var Rxports = {
 		return weekDay[date.Format('w')]
 	},
     WXshare: function(setUpInfo, callback) {
-		var index=window.location.href.indexOf('from')
-		if(index == -1) {
-            var shareUrl = window.location.href;
-		}else{
-            var shareUrl = window.location.href.substring(0,index-1);
-		}
-		alert(shareUrl)
+		// var index=window.location.href.indexOf('from')
+		// if(index == -1) {
+         //    var shareUrl = window.location.href;
+		// }else{
+         //    var shareUrl = window.location.href.substring(0,index-1);
+		// }
+        var shareUrl = encodeURIComponent(window.location.href)
 		var shareTitle_t = setUpInfo.shareTitle_t || setUpInfo.title;
 		var lineLink_t = shareUrl;
 		var imgUrl_t = setUpInfo.imgUrl_t || setUpInfo.imageUrl;
