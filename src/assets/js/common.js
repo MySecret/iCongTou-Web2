@@ -166,7 +166,7 @@ var Rxports = {
 		return weekDay[date.Format('w')]
 	},
     WXshare: function(setUpInfo, callback) {
-		var shareUrl = location.href.split('#')[0];
+		var shareUrl = window.location.href;
 		var shareTitle_t = setUpInfo.shareTitle_t || setUpInfo.title;
 		var lineLink_t = shareUrl;
 		var imgUrl_t = setUpInfo.imgUrl_t || setUpInfo.imageUrl;
