@@ -146,6 +146,18 @@
                 return `height: ${this.windowH}px`
             }
         },
+        created() {
+            // 设置分享
+            let shareInfo = {
+                "title":'分享标题',
+                "text":'分享描述',
+                "imageUrl":'',
+                "url":window.location.href
+            }
+            Rxports.WXshare(shareInfo,() => {
+                alert(1)
+            })
+        },
         mounted() {
             this.pageOnePlay = true // 第一个声音默认可以播放
             setTimeout(this._pageTransform, 5000)
@@ -160,16 +172,7 @@
             }).then(function(json) {
                 that.ctStock = json.data
             })
-            // 设置分享
-            let shareInfo = {
-                "title":'分享标题',
-                "text":'分享描述',
-                "imageUrl":'',
-                "url":window.location.href
-            }
-            Rxports.WXshare(shareInfo,() => {
-                alert(1)
-            })
+
         },
         watch: {
             pageOnePlay(newPlay) {

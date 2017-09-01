@@ -181,6 +181,7 @@ var Rxports = {
 		var Wxsharemessage = 'http://api2.zmkm.la/api/rest/system/jssdk'; //这里必须写死这个后台的接口，因为微信没有QA，所以直接用正式的
 		var options = {
 			success: function(data){
+				console.log(data)
                 var data = data.data;
                 var appid = data.appid;
                 var timestamp = data.timestamp;
@@ -225,12 +226,13 @@ var Rxports = {
                         }
                     });
                 });
+			},
+			data: {
+                "url" : shareUrl
 			}
 		};
 		this.ajaxJsonp(Wxsharemessage,options)
 	}
-
-
 };
 Date.prototype.Format = function(fmt)
 { //author: meizz
