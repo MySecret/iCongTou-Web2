@@ -119,6 +119,14 @@ var Rxports = {
 　　     return unescape(RegExp.$2.replace(/\+/g, " "));
 　　     return "";
 	},
+    isWeiXin: function() {
+		var ua = window.navigator.userAgent.toLowerCase();
+		if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+			return true;
+		} else {
+			return false;
+		}
+	},
 	ajaxJsonp:function(_url,options){
 		var options =Object.assign({jsonpCallback:'jsoncallback'},options ||{}),
 			 params = options.data || {},
@@ -193,7 +201,7 @@ var Rxports = {
                         link: lineLink_t, // 分享链接
                         imgUrl: imgUrl_t, // 分享图标
                         success: function () {
-							alert('分享成功')
+                            callback()
                             // 用户确认分享后执行的回调函数
                         },
                         cancel: function () {
@@ -209,7 +217,7 @@ var Rxports = {
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () {
-                            callback
+                            callback()
                             // 用户确认分享后执行的回调函数
                         },
                         cancel: function () {

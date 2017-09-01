@@ -87,8 +87,8 @@
         <div class="share" v-show="share">
             <img src="./assets/share.png" alt="">
         </div>
-        <audio :src="voice.zero.src" @canplay="pageOneCanPlay" ref="pageOneMp3"></audio>
-        <audio :src="ctStock.url"  ref="pageTwo1Mp3" @timeupdate="voiceLength" @ended="ctVoiceEnded"></audio>
+        <audio :src="voice.zero.src"  ref="pageOneMp3"  @error="error"></audio>
+        <audio :src="ctStock.url"  ref="pageTwo1Mp3" @timeupdate="updateTime" @ended="ctVoiceEnded"></audio>
         <audio :src="voice.two.src"  ref="pageTwo2Mp3"  @ended="ctTwoVoiceEnded"></audio>
     </div>
 </template>
@@ -119,7 +119,7 @@
                 },
                 voice: {
                     zero:{
-                        src: 'http://cdnringuc.shoujiduoduo.com/ringres/user/a24/253/24990253.aac',
+                        src: 'http://ws.stream.qqmusic.qq.com/105030812.m4a?fromtag=46',
                         length:0,
                         play: false
                     },
@@ -147,6 +147,7 @@
             }
         },
         mounted() {
+            this.pageOnePlay = true // 第一个声音默认可以播放
             setTimeout(this._pageTransform, 5000)
             let date = new Date()
             this.time = Rxports.formatTimeToWeek(date) +' '+ Rxports.formatTimeToHour(date)
@@ -166,28 +167,55 @@
                 "imageUrl":'',
                 "url":window.location.href
             }
-            Rxports.WXshare(shareInfo)
+            Rxports.WXshare(shareInfo,() => {
+                alert(1)
+            })
         },
         watch: {
             pageOnePlay(newPlay) {
                 this.$nextTick(() => {
-                    return newPlay ? this.$refs.pageOneMp3.play() : this.$refs.pageOneMp3.pause()
+                    if(Rxports.isWeiXin()){
+                        let that = this
+                        document.addEventListener('WeixinJSBridgeReady', function() {
+                            return newPlay ? that.$refs.pageOneMp3.play() : that.$refs.pageOneMp3.pause()
+                        })
+                        return newPlay ? that.$refs.pageOneMp3.play() : that.$refs.pageOneMp3.pause()
+                    }else{
+                        return newPlay ? this.$refs.pageOneMp3.play() : this.$refs.pageOneMp3.pause()
+                    }
                 })
             },
             pageTwoPlay1(newPlay) {
                 this.$nextTick(() => {
-                    return newPlay ? this.$refs.pageTwo1Mp3.play() : this.$refs.pageTwo1Mp3.pause()
+//                    if(Rxports.isWeiXin()){
+//                        let that = this
+//                        document.addEventListener('WeixinJSBridgeReady', function() {
+//                            alert(1)
+//                            return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
+//                        })
+//                        return newPlay ? that.$refs.pageTwo1Mp3.play() : that.$refs.pageTwo1Mp3.pause()
+//                    }else {
+                        return newPlay ? this.$refs.pageTwo1Mp3.play() : this.$refs.pageTwo1Mp3.pause()
+//                    }
                 })
             },
             pageTwoPlay2(newPlay) {
                 this.$nextTick(() => {
-                    return newPlay ? this.$refs.pageTwo2Mp3.play() : this.$refs.pageTwo2Mp3.pause()
+                    if(Rxports.isWeiXin()){
+                        let that = this
+                        document.addEventListener('WeixinJSBridgeReady', function() {
+                            return newPlay ? that.$refs.pageTwo2Mp3.play() : that.$refs.pageTwo2Mp3.pause()
+                        })
+                        return newPlay ? that.$refs.pageTwo2Mp3.play() : that.$refs.pageTwo2Mp3.pause()
+                    }else {
+                        return newPlay ? this.$refs.pageTwo2Mp3.play() : this.$refs.pageTwo2Mp3.pause()
+                    }
                 })
             }
         },
         methods: {
-            shareSuccess() {
-              alert('才成功')
+            error(){
+                alert('报错')
             },
             docTouchStart(e) {
                 this.touchY = e.touches[0].pageY
@@ -232,10 +260,7 @@
                 }
                 Rxports.ajaxJsonp(searchUrl, option)
             },
-            pageOneCanPlay() {
-                this.pageOnePlay = true
-            },
-            voiceLength(e) {
+            updateTime(e) {
                 this.voice.one.length = e.target.duration
             },
             ctVoiceEnded() {
@@ -375,6 +400,8 @@
                                 height:34px;
                             }
                             .red{
+                                width:18px;
+                                height:18px;
                                 position: absolute;
                                 right:0px;
                                 top:35px;
@@ -474,7 +501,9 @@
         img{
             position: absolute;
             right:0px;
-
+            top:0px;
+            width:288px;
+            height:269px;
         }
     }
 </style>
