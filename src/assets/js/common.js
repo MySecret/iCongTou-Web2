@@ -174,7 +174,6 @@ var Rxports = {
 		}else{
             var shareUrl = location.href.substring(0, location.href.lastIndexOf('?'))
 		}
-		alert(shareUrl)
 		var shareTitle_t = setUpInfo.shareTitle_t || setUpInfo.title;
 		var lineLink_t = shareUrl;
 		var imgUrl_t = setUpInfo.imgUrl_t || setUpInfo.imageUrl;
