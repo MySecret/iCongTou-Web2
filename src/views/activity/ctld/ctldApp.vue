@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="answer-img">
-                            <img src="./assets/logo.jpg" alt="">
+                            <img src="./assets/user.jpg" alt="">
                         </div>
                     </div>
                     <div class="msg ctmsg" v-show="voice.two.src" @click="voiceTwoPlay" >
@@ -128,7 +128,8 @@
                         src: '',
                         length:11,
                         red: 1,
-                        play: false
+                        play: false,
+                        show: 0
                     },
                     two:{
                         src: '',
@@ -159,7 +160,10 @@
         },
         mounted() {
             this.pageOnePlay = true // 第一个声音默认可以播放
-            setTimeout(this._pageTransform, 5000)
+
+            let t = setTimeout(this._pageTransform, 6000)
+
+
             let date = new Date()
             this.time = Rxports.formatTimeToWeek(date) +' '+ Rxports.formatTimeToHour(date)
             let url = loadUrl
