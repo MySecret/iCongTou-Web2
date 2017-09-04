@@ -41,14 +41,14 @@
                     </div>
                     <div class="msg usermsg" v-show="userDate">
                         <div class="answer-text">
-                            <div class="answer-name">侦查员小聪</div>
+                            <div class="answer-name">{{userName}}</div>
                             <div class="answer-msg">
                                 <p class="answer-vioce">{{userDate}}</p>
                                 <p class="sanjiao i-user"></p>
                             </div>
                         </div>
                         <div class="answer-img">
-                            <img src="./assets/user.jpg" alt="">
+                            <img :src="userAvatar" alt="">
                         </div>
                     </div>
                     <div class="msg ctmsg" v-show="voice.two.show" @click="voiceTwoPlay" >
@@ -99,10 +99,13 @@
     import {prefixStyle} from 'assets/js/dom'
     import Rxports from 'assets/js/common'
     import fetchJsonp from 'fetch-jsonp'
+    import {querystring} from 'vux'
     const transform = prefixStyle('transform')
     const transition = prefixStyle('transition')
     let searchUrl = PublicUrlAPI + 'stock/searchAndSort'
     let loadUrl = PublicUrlAPI + 'activity/call'
+    let userInfoUrl = PublicUrlAPI + 'user/my/info/sync'
+    let token = window.localStorage.ctH5token
     export default {
         data() {
             return{
@@ -116,6 +119,8 @@
                 pageOnePlay: false,
                 pageTwoPlay1: false,
                 pageTwoPlay2: false,
+                userAvatar:'',
+                userName:'',
                 ctStock: {
                 },
                 voice: {
@@ -153,18 +158,28 @@
             }
         },
         beforeCreate() {
-            let from = Rxports.getUrlQuery('from')
-            let isappinstalled = Rxports.getUrlQuery('isappinstalled')
+            let urlParams = querystring.parse(location.search)
+            let from = urlParams.from
+            let isappinstalled = urlParams.isappinstalled
             if(from || isappinstalled) {
                 window.location.href = location.href.substring(0, location.href.lastIndexOf('?'))
+            }
+            let token = window.localStorage.ctH5token
+            let openid = urlParams.token
+            if(openid) {
+                localStorage.setItem('ctH5token', openid)
+            }
+
+            if(!token && !openid) {// 如果头部没有token，本地存储也没有token，那就去掉微信登录
+                var rdirecct_uri=encodeURI('http://api2.zmkm.la/api/weixin/auth/callback',"UTF-8")
+                var appid='wx69961095c4129c21';
+                var state=encodeURI(window.location.href,"UTF-8")
+                window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+rdirecct_uri+'&response_type=code&scope=snsapi_userinfo&state='+state+'#wechat_redirect'
             }
         },
         mounted() {
             this.pageOnePlay = true // 第一个声音默认可以播放
-
             let t = setTimeout(this._pageTransform, 6000)
-
-
             let date = new Date()
             this.time = Rxports.formatTimeToWeek(date) +' '+ Rxports.formatTimeToHour(date)
             let url = loadUrl
@@ -187,6 +202,7 @@
                 this.share = 0
                 this.voiceClick = 0
             })
+            this.loadUserAvatar()
         },
         watch: {
             pageOnePlay(newPlay) {
@@ -239,6 +255,25 @@
             }
         },
         methods: {
+            loadUserAvatar() {
+                let url = userInfoUrl
+                let that = this
+                let option = {
+                    data:{
+                        token: window.localStorage.ctH5token
+                    },
+                    success:function(res) {
+                        if(res.code){
+                            alert(res.msg)
+                            return
+                        }
+                        let data = res.data
+                        that.userAvatar = data.avatar
+                        that.userName = data.show_name
+                    }
+                }
+                Rxports.ajaxJsonp(url, option)
+            },
             error(){
                 alert('报错')
             },
