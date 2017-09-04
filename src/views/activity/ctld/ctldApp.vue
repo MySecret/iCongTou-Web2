@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="msg ctmsg" @click="voicePlay">
+                    <div class="msg ctmsg" @click="voicePlay" v-show="voice.one.show">
                         <div class="answer-img">
                             <img src="./assets/logo.jpg" alt="">
                         </div>
@@ -51,7 +51,7 @@
                             <img src="./assets/user.jpg" alt="">
                         </div>
                     </div>
-                    <div class="msg ctmsg" v-show="voice.two.src" @click="voiceTwoPlay" >
+                    <div class="msg ctmsg" v-show="voice.two.show" @click="voiceTwoPlay" >
                         <div class="answer-img">
                             <img src="./assets/logo.jpg" alt="">
                         </div>
@@ -135,7 +135,8 @@
                         src: '',
                         length:11,
                         red: 1,
-                        play: false
+                        play: false,
+                        show: 0
                     }
                 },
                 userDate:'',
@@ -255,6 +256,7 @@
                     this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
                     this.pageOnePlay = false
                     this.autoTransform = 0
+                    let b = setTimeout(this.oneVoiceMsgShow , 2000)
                     return;
                 }
             },
@@ -263,6 +265,7 @@
                     this.$refs.container.style[transition] = `all 0.3s`
                     this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
                     this.pageOnePlay = false
+                    let b = setTimeout(this.oneVoiceMsgShow , 2000)
                 }
             },
             _pageTransformTwo(){
@@ -337,11 +340,17 @@
                     return response.json()
                 }).then(function(json) {
                     that.voice.two.src = json.data.url
-
+                    setTimeout(that.twoVoiceMsgShow,1000)
                 })
             },
             download() {
                 window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.niusan.zmkm"
+            },
+            oneVoiceMsgShow() {
+                this.voice.one.show = 1
+            },
+            twoVoiceMsgShow() {
+                this.voice.two.show = 1
             }
         }
     }
@@ -407,6 +416,12 @@
                 .ctmsg{
                     text-align: left;
                     justify-content: flex-start;
+                    /*.answer-text{*/
+
+                    /*}*/
+                    .answer-audio{
+                        width:240px;
+                    }
                 }
                 .usermsg{
                     text-align: right;
@@ -453,7 +468,7 @@
                             .minite{
                                 position: absolute;
                                 top:75px;
-                                left:160px;
+                                right:-20px;
                                 font-size:28px;
                                 color:#999999;
                             }
