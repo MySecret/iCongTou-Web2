@@ -150,6 +150,13 @@
                 return `height: ${this.windowH}px`
             }
         },
+        beforeCreate() {
+            let from = Rxports.getUrlQuery('from')
+            let isappinstalled = Rxports.getUrlQuery('isappinstalled')
+            if(from || isappinstalled) {
+                window.location.href = location.href.substring(0, location.href.lastIndexOf('?'))
+            }
+        },
         mounted() {
             this.pageOnePlay = true // 第一个声音默认可以播放
             setTimeout(this._pageTransform, 5000)
