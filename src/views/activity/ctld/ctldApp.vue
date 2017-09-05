@@ -91,7 +91,7 @@
         <audio :src="voice.zero.src"  ref="pageOneMp3"  @error="error"></audio>
         <audio :src="ctStock.url"  ref="pageTwo1Mp3" @ended="ctVoiceEnded"></audio>
         <audio :src="voice.two.src"  ref="pageTwo2Mp3"  @ended="ctTwoVoiceEnded"></audio>
-        <audio src="http://001file.liqucn.com/upload/2014/lingsheng/duanxin/1399352659iPhonedemorenduanxinlingyinsanquanyin.mp3" ref="msg" @ended="msgVoiceEnded"></audio>
+        <audio src="http://att.chinauui.com/day_140908/000_102_2fdbd1f0dfed368bde1184b5a2cc0add.mp3" ref="msg" @ended="msgVoiceEnded"></audio>
     </div>
 </template>
 
@@ -259,7 +259,7 @@
                     if(Rxports.isWeiXin()){
                         let that = this
                         if(window.WeixinJSBridge) {
-                            return newPlay ? that.$refs.pageOneMp3.play() : that.$refs.pageOneMp3.pause()
+                            return newPlay ? that.$refs.msg.play() : that.$refs.msg.pause()
                         }else {
                             document.addEventListener('WeixinJSBridgeReady', function() {
                                 return newPlay ? that.$refs.msg.play() : that.$refs.msg.pause()
@@ -300,16 +300,18 @@
                 this.touchY = e.touches[0].pageY
             },
             docTouchMove(e) {
-                this.touchnewY = e.touches[0].pageY
-                let moveY = -(this.touchnewY - this.touchY)
-                if (moveY > 0 && moveY / this.windowH > 0.2) {
-                    this.$refs.container.style[transition] = `all 0.3s`
-                    this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
-                    this.pageOnePlay = false
-                    this.autoTransform = 0
-                    this.msgVoice = true
-                    let b = setTimeout(this.oneVoiceMsgShow , 2000)
-                    return;
+                if(this.autoTransform) {
+                    this.touchnewY = e.touches[0].pageY
+                    let moveY = -(this.touchnewY - this.touchY)
+                    if (moveY > 0 && moveY / this.windowH > 0.2) {
+                        this.$refs.container.style[transition] = `all 0.3s`
+                        this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
+                        this.msgVoice = true
+                        this.pageOnePlay = false
+                        this.autoTransform = 0
+                        let b = setTimeout(this.oneVoiceMsgShow , 2000)
+                        return;
+                    }
                 }
             },
             _pageTransform() {
@@ -318,6 +320,7 @@
                     this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
                     this.pageOnePlay = false
                     this.msgVoice = true
+                    this.autoTransform = 0
                     let b = setTimeout(this.oneVoiceMsgShow , 2000)
                 }
             },
