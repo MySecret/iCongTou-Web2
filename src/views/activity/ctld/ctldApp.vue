@@ -164,17 +164,17 @@
             if(from || isappinstalled) {
                 window.location.href = location.href.substring(0, location.href.lastIndexOf('?'))
             }
-            let token = window.localStorage.ctH5token
-            let openid = urlParams.token
-            if(openid) {
-                localStorage.setItem('ctH5token', openid)
-            }
-            if(!openid) {// 如果头部没有token，本地存储也没有token，那就去掉微信登录
-                var rdirecct_uri=encodeURI('http://api2.zmkm.la/api/weixin/auth/callback',"UTF-8")
-                var appid='wx69961095c4129c21';
-                var state=encodeURI(window.location.href,"UTF-8")
-                window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+rdirecct_uri+'&response_type=code&scope=snsapi_userinfo&state='+state+'#wechat_redirect'
-            }
+//            let token = window.localStorage.ctH5token
+//            let openid = urlParams.token
+//            if(openid) {
+//                localStorage.setItem('ctH5token', openid)
+//            }
+//            if(!openid) {// 如果头部没有token，本地存储也没有token，那就去掉微信登录
+//                var rdirecct_uri=encodeURI('http://api2.zmkm.la/api/weixin/auth/callback',"UTF-8")
+//                var appid='wx69961095c4129c21';
+//                var state=encodeURI(window.location.href,"UTF-8")
+//                window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+rdirecct_uri+'&response_type=code&scope=snsapi_userinfo&state='+state+'#wechat_redirect'
+//            }
         },
         mounted() {
             this.pageOnePlay = true // 第一个声音默认可以播放
@@ -201,7 +201,7 @@
                 this.share = 0
                 this.voiceClick = 0
             })
-            this.loadUserAvatar()
+//            this.loadUserAvatar()
         },
         watch: {
             pageOnePlay(newPlay) {
