@@ -91,7 +91,7 @@
         <audio :src="voice.zero.src"  ref="pageOneMp3"  @error="error"></audio>
         <audio :src="ctStock.url"  ref="pageTwo1Mp3" @ended="ctVoiceEnded"></audio>
         <audio :src="voice.two.src"  ref="pageTwo2Mp3"  @ended="ctTwoVoiceEnded"></audio>
-        <audio :src="voice.msg.src" ref="msg" @ended="msgVoiceEnded"></audio>
+        <audio src="http://001file.liqucn.com/upload/2014/lingsheng/duanxin/1399352659iPhonedemorenduanxinlingyinsanquanyin.mp3" ref="msg" @ended="msgVoiceEnded"></audio>
     </div>
 </template>
 
@@ -143,9 +143,6 @@
                         red: 1,
                         play: false,
                         show: 0
-                    },
-                    msg:{
-                        src:'http://001file.liqucn.com/upload/2014/lingsheng/duanxin/1399352659iPhonedemorenduanxinlingyinsanquanyin.mp3'
                     }
                 },
                 userDate:'',
