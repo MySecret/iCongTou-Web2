@@ -91,6 +91,7 @@
         <audio :src="voice.zero.src"  ref="pageOneMp3"  @error="error"></audio>
         <audio :src="ctStock.url"  ref="pageTwo1Mp3" @ended="ctVoiceEnded"></audio>
         <audio :src="voice.two.src"  ref="pageTwo2Mp3"  @ended="ctTwoVoiceEnded"></audio>
+        <audio src="http://001file.liqucn.com/upload/2014/lingsheng/duanxin/1399352659iPhonedemorenduanxinlingyinsanquanyin.mp3" ref="msg" @ended="msgVoiceEnded"></audio>
     </div>
 </template>
 
@@ -119,8 +120,8 @@
                 pageOnePlay: false,
                 pageTwoPlay1: false,
                 pageTwoPlay2: false,
-                userAvatar:'',
-                userName:'',
+                userAvatar:'http://img2.woyaogexing.com/2017/08/17/9a3da279feca508a!400x400_big.jpg',
+                userName:'小股神',
                 ctStock: {
                 },
                 voice: {
@@ -148,7 +149,8 @@
                 guideShow: 1,
                 ctVoiceEnd: 0,
                 share: 0,
-                voiceClick: 1
+                voiceClick: 1,
+                msgVoice:false
             }
         },
         computed: {
@@ -164,17 +166,17 @@
             if(from || isappinstalled) {
                 window.location.href = location.href.substring(0, location.href.lastIndexOf('?'))
             }
-//            let token = window.localStorage.ctH5token
-//            let openid = urlParams.token
-//            if(openid) {
-//                localStorage.setItem('ctH5token', openid)
-//            }
-//            if(!openid) {// 如果头部没有token，本地存储也没有token，那就去掉微信登录
-//                var rdirecct_uri=encodeURI('http://api2.zmkm.la/api/weixin/auth/callback',"UTF-8")
-//                var appid='wx69961095c4129c21';
-//                var state=encodeURI(window.location.href,"UTF-8")
-//                window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+rdirecct_uri+'&response_type=code&scope=snsapi_userinfo&state='+state+'#wechat_redirect'
-//            }
+            let token = window.localStorage.ctH5token
+            let openid = urlParams.token
+            if(openid) {
+                localStorage.setItem('ctH5token', openid)
+            }
+            if(!openid) {// 如果头部没有token，本地存储也没有token，那就去掉微信登录
+                var rdirecct_uri=encodeURI('http://api2.zmkm.la/api/weixin/auth/callback',"UTF-8")
+                var appid='wx69961095c4129c21';
+                var state=encodeURI(window.location.href,"UTF-8")
+                window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appid+'&redirect_uri='+rdirecct_uri+'&response_type=code&scope=snsapi_userinfo&state='+state+'#wechat_redirect'
+            }
         },
         mounted() {
             this.pageOnePlay = true // 第一个声音默认可以播放
@@ -201,7 +203,7 @@
                 this.share = 0
                 this.voiceClick = 0
             })
-//            this.loadUserAvatar()
+            this.loadUserAvatar()
         },
         watch: {
             pageOnePlay(newPlay) {
@@ -251,7 +253,23 @@
                         return newPlay ? this.$refs.pageTwo2Mp3.play() : this.$refs.pageTwo2Mp3.pause()
                     }
                 })
-            }
+            },
+            msgVoice(newPlay) {
+                this.$nextTick(() => {
+                    if(Rxports.isWeiXin()){
+                        let that = this
+                        if(window.WeixinJSBridge) {
+                            return newPlay ? that.$refs.pageOneMp3.play() : that.$refs.pageOneMp3.pause()
+                        }else {
+                            document.addEventListener('WeixinJSBridgeReady', function() {
+                                return newPlay ? that.$refs.msg.play() : that.$refs.msg.pause()
+                            })
+                        }
+                    }else{
+                        return newPlay ? this.$refs.msg.play() : this.$refs.msg.pause()
+                    }
+                })
+            },
         },
         methods: {
             loadUserAvatar() {
@@ -263,7 +281,6 @@
                     },
                     success:function(res) {
                         if(res.code){
-                            alert(res.msg)
                             return
                         }
                         let data = res.data
@@ -290,6 +307,7 @@
                     this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
                     this.pageOnePlay = false
                     this.autoTransform = 0
+                    this.msgVoice = true
                     let b = setTimeout(this.oneVoiceMsgShow , 2000)
                     return;
                 }
@@ -299,6 +317,7 @@
                     this.$refs.container.style[transition] = `all 0.3s`
                     this.$refs.container.style[transform] = `translate3d(0, -${this.windowH}px, 0)`
                     this.pageOnePlay = false
+                    this.msgVoice = true
                     let b = setTimeout(this.oneVoiceMsgShow , 2000)
                 }
             },
@@ -339,6 +358,9 @@
                 this.pageTwoPlay2 = false
                 this.autoTransform = 1
                 setTimeout(this._pageTransformTwo, 1000)
+            },
+            msgVoiceEnded() {
+                this.msgVoice = false
             },
             format(interval) {
                 interval = Math.round(interval)
@@ -381,9 +403,11 @@
                 window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.niusan.zmkm"
             },
             oneVoiceMsgShow() {
+                this.msgVoice = true
                 this.voice.one.show = 1
             },
             twoVoiceMsgShow() {
+                this.msgVoice = true
                 this.voice.two.show = 1
             }
         }
@@ -597,8 +621,8 @@
         position: absolute;
         bottom:110px;
         left:20px;
-        width:266px;
-        height:177px;
+        width:510px;
+        height:190px;
     }
     .share{
         position: fixed;
@@ -611,8 +635,8 @@
             position: absolute;
             right:0px;
             top:0px;
-            width:288px;
-            height:269px;
+            width:331px;
+            height:283px;
         }
     }
 </style>
