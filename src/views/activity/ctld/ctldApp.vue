@@ -169,8 +169,7 @@
             if(openid) {
                 localStorage.setItem('ctH5token', openid)
             }
-
-            if(!token && !openid) {// 如果头部没有token，本地存储也没有token，那就去掉微信登录
+            if(!openid) {// 如果头部没有token，本地存储也没有token，那就去掉微信登录
                 var rdirecct_uri=encodeURI('http://api2.zmkm.la/api/weixin/auth/callback',"UTF-8")
                 var appid='wx69961095c4129c21';
                 var state=encodeURI(window.location.href,"UTF-8")
@@ -508,6 +507,7 @@
                                 color:#999999;
                             }
                             .answer-vioce{
+                                display:inline-block;
                                 text-align: left;
                                 font-size:32px;
                                 max-width:460px;
